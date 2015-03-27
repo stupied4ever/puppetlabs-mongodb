@@ -53,6 +53,7 @@ class mongodb::params inherits mongodb::globals {
         $config                  = '/etc/mongod.conf'
         $mongos_config           = '/etc/mongodb-shard.conf'
         $dbpath                  = '/var/lib/mongodb'
+        $ensure_dbpath           = true
         $logpath                 = '/var/log/mongodb/mongod.log'
         $pidfilepath             = '/var/run/mongodb/mongod.pid'
         $bind_ip                 = pick($::mongodb::globals::bind_ip, ['127.0.0.1'])

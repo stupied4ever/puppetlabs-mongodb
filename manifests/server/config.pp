@@ -7,6 +7,7 @@ class mongodb::server::config {
   $config_content  = $mongodb::server::config_content
 
   $dbpath          = $mongodb::server::dbpath
+  $ensure_dbpath   = $mongodb::server::ensure_dbpath
   $pidfilepath     = $mongodb::server::pidfilepath
   $logpath         = $mongodb::server::logpath
   $logappend       = $mongodb::server::logappend
@@ -183,18 +184,22 @@ class mongodb::server::config {
       mode    => '0644',
     }
 
-    file { $dbpath:
-      ensure  => directory,
-      mode    => '0755',
-      owner   => $user,
-      group   => $group,
-      require => File[$config]
+    if $ensure_dbpath {
+      file { $dbpath:
+        ensure  => present,
+        mode    => '0755',
+        owner   => $user,
+        group   => $group,
+        require => File[$config]
+      }
     }
   } else {
-    file { $dbpath:
-      ensure => absent,
-      force  => true,
-      backup => false,
+    if $ensure_dbpath {
+      file { $dbpath:
+        ensure => absent,
+        force  => true,
+        backup => false,
+      }
     }
     file { $config:
       ensure => absent
